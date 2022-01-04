@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="701e3283-ad3c-4865-946f-7bf622de2ed8" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="batchprocessingFlow" doc:id="35c19bb4-fb54-43c3-b1e5-2643255cd1d6" >
+		<http:listener doc:name="Listener" doc:id="a6b48d6b-8ecf-4499-9153-29d29621b442" />
+		<batch:job jobName="batchprocessingBatch_Job" doc:id="627574f9-7ffe-4795-900a-febc0f01ed85" >
+			<batch:process-records >
+				<batch:step name="Batch_Step" doc:id="3033ddaa-3b45-470b-a024-3990c957c0f1" />
+			</batch:process-records>
+		</batch:job>
+		<db:insert doc:name="Insert" doc:id="ce48044e-921e-4800-98da-8d4b44c59e6e" />
+	</flow>
+</mule>

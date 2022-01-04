@@ -41,10 +41,9 @@ branch : payload.branch
 		<ee:transform doc:name="Transform Message" doc:id="257b15ef-c07e-4ef2-860a-464664bffce2" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
+output application/json
 ---
-{
-}]]></ee:set-payload>
+payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 	</flow>

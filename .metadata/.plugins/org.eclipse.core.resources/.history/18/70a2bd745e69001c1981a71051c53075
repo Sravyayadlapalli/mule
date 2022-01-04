@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="91acef83-515d-4e52-b4d1-eaf677c1a772" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="553abdf9-5556-442e-b174-d2547cecb78a" >
+		<http:request-connection host="http://localhost:8081/trail" />
+	</http:request-config>
+	<flow name="errorhandlingFlow" doc:id="dd66544a-680f-489f-940f-d5733333a8b1" >
+		<http:listener doc:name="Listener" doc:id="0d4d27fd-1a8a-44ff-8b9b-9e19c6571ba0" config-ref="HTTP_Listener_config" path="/errorhandling"/>
+		<set-payload value='#["hello welcome message"]' doc:name="Set Payload" doc:id="c09bbe61-e429-416b-aa8f-307bc726aa54" />
+		<http:request method="POST" doc:name="Request" doc:id="407a6ff1-ccec-4911-b919-9ab3f4387681" config-ref="HTTP_Request_configuration" path="/sravya"/>
+		<error-handler>
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="674bb2d3-01ab-4639-9848-a17c03f70424" type="ANY">
+				<set-payload value='#["hello sravya"]' doc:name="Set Payload" doc:id="304f45f6-9d26-418e-84d6-245d8ccc2138" />
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+</mule>

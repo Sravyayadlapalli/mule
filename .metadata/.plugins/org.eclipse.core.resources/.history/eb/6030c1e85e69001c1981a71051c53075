@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="1b9c14f8-d56c-4329-a2ec-9aa462a1e286" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="cf96ca14-4650-451a-9b57-6579e34cb18a">
+		<http:request-connection host="sravyaassesment1.us-e2.cloudhub.io" >
+			<http:authentication >
+				<http:basic-authentication />
+			</http:authentication>
+		</http:request-connection>
+	</http:request-config>
+	<flow name="errorhandlerFlow" doc:id="765b4753-b5df-4c21-b565-ac2aa725f337" >
+		<http:listener doc:name="Listener" doc:id="5d7b7e0f-b904-4f85-be0d-a9ba8ab12a24" config-ref="HTTP_Listener_config" path="/chinnu"/>
+		<flow-ref doc:name="Flow Reference" doc:id="40190a55-2bd3-4573-9856-0fae08bfed00" name="errorhandlerFlow"/>
+	</flow>
+	<flow name="errorhandlerFlow1" doc:id="4fc81fef-8ffd-4f0a-880c-b44bac4b83f0" >
+		<http:request method="POST" doc:name="Request" doc:id="d475af7d-cce3-4864-888d-0c6c0b7fca02" config-ref="HTTP_Request_configuration" path="/sravya2"/>
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="023fa68a-4601-4e89-963b-eda9894e20aa" >
+				<set-payload value='#["hello from otherside"]' doc:name="Set Payload" doc:id="ba4d3838-9521-4029-b57c-712cf572afc9" />
+			</on-error-continue>
+		</error-handler>
+	</flow>
+</mule>

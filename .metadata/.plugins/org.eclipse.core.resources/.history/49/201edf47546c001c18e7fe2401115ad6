@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="4e6187c6-d99c-4dd9-b5bc-28f6271d5442" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="foreachFlow" doc:id="d38f2897-8613-47b9-b145-c85865cb0dbf" >
+		<http:listener doc:name="Listener" doc:id="c7379ae9-c9ff-4560-b8c5-5a1014443c53" config-ref="HTTP_Listener_config" path="/each"/>
+		<set-payload value="#['hello welcome']" doc:name="Set Payload" doc:id="3f07f001-2a81-4679-9c1f-6122ab6a692d" />
+		<foreach doc:name="For Each" doc:id="0abaa7fc-1b12-4c81-acea-632069a643b7" batchSize="5">
+			<set-payload value="#['hi welcome to mulesoft training.......']" doc:name="Set Payload" doc:id="32705c2c-a23b-4183-9410-78c32a6be396" />
+		</foreach>
+		<set-payload value="#['mule soft training']" doc:name="Set Payload" doc:id="f40f7417-8395-4e11-9ad9-24458d346cf4" />
+	</flow>
+</mule>

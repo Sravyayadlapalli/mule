@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="85f4586b-6ae4-4b30-a169-e6dd0f4d4450" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:listener-config name="HTTP_Listener_config1" doc:name="HTTP Listener config" doc:id="ec3351de-73a6-433b-92d0-dad05144d8f1" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:listener-config name="HTTP_Listener_config2" doc:name="HTTP Listener config" doc:id="0f5e7b98-68be-4016-aaf3-be85ddf291c6" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:listener-config name="HTTP_Listener_config3" doc:name="HTTP Listener config" doc:id="5dc1970b-bea4-4a75-8b14-00cec7c4dbef" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="trail-githubFlow1" doc:id="ded72e0e-ffbb-4124-9ac5-5bda97e3f3ed" >
+		<logger level="INFO" doc:name="Logger" doc:id="de8ff4ed-dc2f-4f84-b83f-636041283dbd" message="sravya"/>
+	</flow>
+	<flow name="trail-githubFlow" doc:id="ae5ba471-c6e5-43f7-a981-6dfb7fb60356" >
+		<http:listener doc:name="Listener" doc:id="e7f76fad-4629-4817-b723-9c80e2fa33af" />
+		<set-payload value="trail" doc:name="Set Payload" doc:id="c3799c1a-b40a-4b3e-bb5d-19ac9b18a310" />
+	</flow>
+</mule>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="0c2a4d8a-d028-4da1-ac10-a9493e0554cb" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="helloworld-sravya1Flow" doc:id="6de8b233-823f-478e-b93c-0fe4501a9195" >
+		<http:listener doc:name="Listener" doc:id="def87c5b-04f7-4b9c-affb-5d19e23559fa" config-ref="HTTP_Listener_config" path="/sravya"/>
+		<set-variable value="#[uuid()]" doc:name="Set Variable" doc:id="608472a4-a90d-4a62-8c3e-f6289366bf79" variableName="Corelationid"/>
+		<logger level="INFO" doc:name="Logger" doc:id="4c646d01-c6d3-4558-af6a-fd5d42defc8e" message="Corelationid-#[vars.Corelationid]-#[payload]"/>
+		<ee:transform doc:name="Transform Message" doc:id="675f53d4-6d0f-432b-b276-857ed58457e2" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+---
+payload
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

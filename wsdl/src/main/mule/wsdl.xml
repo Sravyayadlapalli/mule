@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="55d759ca-281d-4941-81a7-ca485df421cc" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<wsc:config name="Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="6b19ec5e-29d7-4126-8034-caa085a38d66" >
+		<wsc:connection wsdlLocation="http://calculator-webservice.mybluemix.net/calculator?wsdl" service="CalculatorService" port="CalculatorPort" address="http://calculator-webservice.mybluemix.net/calculator" >
+			<wsc:web-service-security actor="http://schemas.xmlsoap.org/soap/actor/next" />
+		</wsc:connection>
+	</wsc:config>
+	<flow name="wsdlFlow" doc:id="565af263-d0c6-46c4-a97c-f79fa5eafd83" >
+		<http:listener doc:name="Listener" doc:id="16b19d89-23c2-45b5-beeb-9a46065d2958" config-ref="HTTP_Listener_config" path="/trail"/>
+		<ee:transform doc:name="Transform Message" doc:id="67089680-7ea9-4d74-bbaf-c12f2c9705a2" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://example.com/
+---
+{
+	ns0#add: {
+		intA: payload.q1,
+		intB: payload.q2
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<wsc:consume operation="add" doc:name="Consume" doc:id="b3babae7-4ca3-4b14-bdc1-de3c009a832a" config-ref="Web_Service_Consumer_Config"/>
+		<ee:transform doc:name="Transform Message" doc:id="d4ee18f6-3687-4dc5-914b-c3c5368fea6d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0ns ns0 http://example.com/
+
+output application/json
+---
+{
+ "result": payload.body.ns0#addResponse.value
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

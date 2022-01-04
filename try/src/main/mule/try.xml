@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:validation="http://www.mulesoft.org/schema/mule/validation"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="8f9d1474-899f-4a4b-a356-8bfa749bcf56" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="tryFlow" doc:id="f15f3f1b-6941-44d4-b34f-4fc18ea14ffe" >
+		<http:listener doc:name="Listener" doc:id="dac271e6-aa37-46cd-b333-f30c1d6b66b2" config-ref="HTTP_Listener_config" path="/try"/>
+		<set-payload value='#["hi"]' doc:name="Set Payload" doc:id="2b8f7013-950d-4a2b-ab89-dc18ccb0b3f4" />
+		<try doc:name="Try" doc:id="bf05269b-7721-485d-837a-dce2f388308c" >
+			<validation:is-number numberType="SHORT" doc:name="Is number" doc:id="cadb423d-5627-48a3-8ec2-dcdae44000ba" value="50000" minValue="2000" maxValue="5000"/>
+			<error-handler >
+				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="4d1d5c99-9525-4cba-8b24-f1c2fd618e25" >
+					<set-payload value='#["hello welcome to hyderabad"]' doc:name="Set Payload" doc:id="ef86b25b-f454-49ed-bf88-49b27807c113" />
+				</on-error-continue>
+			</error-handler>
+		</try>
+		<ee:transform doc:name="Transform Message" doc:id="60cf32e2-adc7-456a-ac6c-89d21618ad09" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="tryFlow1" doc:id="4eb311f0-12bd-48c4-bc1b-78d148fbabbb" >
+		<http:listener doc:name="Listener" doc:id="7aac23d1-1ece-495e-98fe-3a482a7852ee" config-ref="HTTP_Listener_config" path="/try1"/>
+		<choice doc:name="Choice" doc:id="f9976536-3fd3-4eea-a1c2-22895d4ab3ad" >
+			<when expression="#[isEmpty(payload)]">
+				<raise-error doc:name="Raise error" doc:id="b6242895-984c-4a39-bee0-c0078f12db2a" type="NO:PAYLOAD " description="no payload is received"/>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Transform Message" doc:id="b30ae2ad-9c14-45bb-b5c2-0bbfeeb984a0" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+"payload is received"]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="d409c450-5ec3-41aa-ba9a-afcf0365f3f9" type="NO:PAYLOAD">
+				<ee:transform doc:name="Transform Message" doc:id="d0357843-de2f-47ec-8610-3164d73b25f5" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+"hello!!!!!!!!!!!!!!!"]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+</mule>

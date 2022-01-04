@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="128ae506-e4e1-4086-847a-e36821b98aac" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="training1Flow" doc:id="b986c9a6-9e13-4b11-96e9-700d3466982a" >
+		<http:listener doc:name="Listener" doc:id="0a8edb64-f192-4214-a799-8f784c826536" config-ref="HTTP_Listener_config" path="/dwl"/>
+		<ee:transform doc:name="Transform Message" doc:id="1ebf5ce2-7ea1-4bf8-b231-5de08f710492" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output json
+var data = {
+	"name": "Max the Mule",
+	"location":
+	{
+		
+	"name":"Max's house",
+	"address":"1234 mulestreet",
+	"state":"ca"
+	}
+}
+---
+data.name,
+	
+	
+
+
+
+
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

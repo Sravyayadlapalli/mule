@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="9fd28cfb-20ef-4280-bc8c-bad09ba22531" >
+		<db:my-sql-connection host="localhost" port="3306" user="root" password="root" database="travelontrip" />
+	</db:config>
+	<flow name="sravyaFlow" doc:id="058ec7ec-6829-42de-9936-050a200a828d" >
+		<choice doc:name="Choice" doc:id="d3e9ad17-140d-4e96-be63-82a02b99a214" >
+			<when expression='#[attributes.uriParams.transportType =="land"]'>
+				<db:select doc:name="Select" doc:id="b3d9213f-0207-4cb1-997f-4eb17e995f8f" config-ref="Database_Config">
+					<db:sql ><![CDATA[SELECT * FROM 'travelontrip'.land;]]></db:sql>
+				</db:select>
+				<ee:transform doc:name="Transform Message" doc:id="be58b5c3-839c-4ed1-8939-51f5ca66a100" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map{
+"originlocation" : {
+"locationcode": $.departureLocationCode
+},
+"destinationlocation":{
+"locationcode": $.destinationLocationCode
+}
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Transform Message" doc:id="ecfd89f1-da32-4208-b6e7-7bccf6148e8d" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
+	</flow>
+</mule>
